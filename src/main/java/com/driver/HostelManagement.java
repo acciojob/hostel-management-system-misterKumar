@@ -12,14 +12,39 @@ public class HostelManagement {
 
     public void addStudent(String studentId, String name) {
     	//your code goes here
+        if(!studentRoomMap.containsKey(studentId)){
+            studentRoomMap.put(studentId,name);
+            HostelLogger.logInfo("Student " + name + " with ID " + studentId + " added.");
+        }
+        else{
+            HostelLogger.logWarning("Student with ID " + studentId + " already exists.");
+        }
     }
 
     public void allocateRoom(String studentId, String roomNumber) {
     	//your code goes here
+        if (studentRoomMap.containsKey(studentId)) {
+            if (!studentRoomMap.containsValue(roomNumber)) {
+                studentRoomMap.put(studentId, roomNumber);
+                HostelLogger.logInfo("Room " + roomNumber + " allocated to student with ID " + studentId);
+            } else {
+                HostelLogger.logWarning("Student with ID " + studentId + " already allocated a room.");
+            }
+        } else {
+            HostelLogger.logWarning("Invalid student ID: " + studentId);
+        }
     }
 
     public boolean isRoomAvailable(String roomNumber) {
     	//your code goes here
+        for (String allocatedRoom : studentRoomMap.values()) {
+            if (allocatedRoom.equals(roomNumber)) {
+                HostelLogger.logInfo("Room " + roomNumber + " is occupied.");
+                return false;
+            }
+        }
+        HostelLogger.logInfo("Room " + roomNumber + " is available for allocation.");
+        return true;
     }
 
     public static void main(String[] args) {
